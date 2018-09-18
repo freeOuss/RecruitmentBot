@@ -40,13 +40,14 @@ var TooltipDialogs = (function() {
     // id attribute for the dialog box
     dialogId: 'welcome-tooltip-dialog',
     // text of the dialog box
-    text: 'Hi! I’m Watson. This is a sample application to see how I work. \n\n'
-      + ' For this app, imagine you’re driving and I’m your co-pilot, here to help however I can.',
+    text: 'Bonjour ! Je suis Sesame, le bot d\'entretien d\'Intercom Group. \n\n'
+      + ' Durant la periode d\'entretien , je vais vous examiner mentalement et visualement.\n\n'
+      + 'Veuillez accepter l\'usage de votre WebCam.',
     // id of an element to display while this dialog box is active
     showId: null
   }, {
     dialogId: 'type-here-tooltip-dialog',
-    text: 'You can ask questions here.',
+    text: 'Vous aller répondre en cliquant sur l\'option correcte ou en tapant votre réponse içi.',
     showId: 'input-wrapper'
   }, {
     dialogId: 'menu-here-tooltip-dialog',
@@ -126,7 +127,7 @@ var TooltipDialogs = (function() {
               'name': 'onclick',
               'value': 'TooltipDialogs.next()'
             }],
-            'text': ((i <= dialogBoxes.length) ? 'Next' : 'Done')
+            'text': ((i <= dialogBoxes.length) ? 'Suivant' : 'Terminé')
           }]
         }]
       };

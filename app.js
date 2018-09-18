@@ -15,11 +15,34 @@
  */
 
 const express = require('express');
+
+
+
+/*changes Here */
+var bodyParser = require('body-parser');
+/*changes here */
+
+
+
 const app = express();
+
+
+
+/*changes here */
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+/*changes here */
+
+/*changes here */
+app.post('/message/QCM1', function(req, res){
+	var obj = {};
+	console.log('body: ' + JSON.stringify(req.body));
+	res.send(req.body);
+});
+/*changes here */
 
 // Bootstrap application settings
 require('./config/express')(app);
-
 // Configure the Watson services
 require('./routes/conversation')(app);
 require('./routes/speech-to-text')(app);

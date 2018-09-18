@@ -140,6 +140,6 @@ body {
 
 @keyframes nav {
     100% {
-        fill: green;
+        fill: blue;
     }
 }

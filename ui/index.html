@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+                                                                                                                                                                                                                <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -18,7 +18,7 @@
          limitations under the License.">
     <meta name="description" content="Watson Conversation Service Car Dashboard Sample Application">
     <title>Watson Assistant Service Car Dashboard Sample Application</title>
-    <!-- build:css css/main.min.css -->
+    
     <link rel="stylesheet" type="text/css" href="css/main.css">
     <link rel="stylesheet" type="text/css" href="css/tooltip-dialogs.css">
     <link rel="stylesheet" type="text/css" href="css/conversation.css">
@@ -30,52 +30,186 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="ct" content="vPWQz9kc-2sDXDdB6m_K5RLm_mwStA0c3cyo">
     <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+
+    
 </head>
 
-<body>
-    <div id="dark-overlay" class="overlay"></div>
-    <div id="clear-overlay" class="overlay"></div>
+<body onload="init();">
+    <style>
+        @import url(https://fonts.googleapis.com/css?family=Lato:300italic,700italic,300,700);
+  
+        body {
+          font-family: 'Lato';
+          background-color: #f0f0f0;
+          margin: 0px auto;
+          max-width: 1150px;
+        }
+        .bgimage{
+          height: 100%;
+          background-color: white;box-shadow: 0 .125rem .875rem 0 rgba(0,0,0,.5);
+          width: 68%;
+          position: absolute;
+        }
+  
+        #overlay {
+          position: absolute;
+          top: 0px;
+          left: 0px;
+          -o-transform : scaleX(-1);
+          -webkit-transform : scaleX(-1);
+          transform : scaleX(-1);
+          -ms-filter : fliph; /*IE*/
+          filter : fliph; /*IE*/
+  
+          
+        }
+  
+        #videoel {
+          -o-transform : scaleX(-1);
+          -webkit-transform : scaleX(-1);
+          transform : scaleX(-1);
+          -ms-filter : fliph; /*IE*/
+          filter : fliph; /*IE*/
+  
+          
+        }
+  
+        #container {
+          position : relative;
+          width : 370px;
+          /*margin : 0px auto;*/
+        }
+  
+        #content {
+          margin-top : 50px;
+          margin-left : 70%;
+          margin-right : auto;
+          max-width: 600px;
+        }
+  
+        h2 {
+          font-weight : 400;
+        }
+  
+        .btn {
+          font-family: 'Lato';
+          font-size: 16px;
+        }
+  
+        #controls {
+          text-align : center;
+        }
+  
+        #emotion_container {
+          width: 400px;
+        }
+  
+        #emotion_icons {
+          height: 50px;
+          padding-left: 40px;
+          display : none;
+        }
+  
+        .emotion_icon {
+          width : 40px;
+          height : 40px;
+          margin-top: 5px;
+          /*margin-left : 13px;*/
+          margin-left : 35px;
+          display : none;
+        }
+  
+        #emotion_chart, #emotion_icons {
+          margin: 0 auto;
+          width : 400px;
+        }
+  
+        #icon1, #icon2, #icon3, #icon4, #icon5, #icon6 {
+          visibility : hidden;
+        }
+        canvas {
+          max-width: 100%;
+          max-height: 100%;
+          display : none; 
+        }
+  
+        /* d3 */
+        .bar {
+          fill : steelblue;
+          fill-opacity : .9;
+        }
+  
+      </style>
     <!--The main car dashboard SVG-->
     <div id="svg_wrapper">
         <div id="output-audio" class="audio-on" onclick="TTSModule.toggle()" value="ON"></div>
-        <button id="help" class="tooltip-dialog-btn" onclick="Sidebar.toggle()">What can I ask?</button>
-        <div id="svg_size">
-            <svg id="svg_canvas" viewBox="0 0 1024 704" version="1.1" xmlns="http://www.w3.org/2000/svg"></svg>
+        <div id="svg_size" >
+            <div><div class="bgimage"></div><svg style="display: none;" id="svg_canvas" viewBox="0 0 1024 704" version="1.1" xmlns="http://www.w3.org/2000/svg"></svg>
+          </div>
         </div>
         <div class="chatUi">
             <div id="chat-scroll-wrapper"><div id="chat-flow"></div></div>
-            <div id="input-wrapper" class="responsive-columns-wrapper">
+            <div id="input-wrapper" style="width: 65%;" class="responsive-columns-wrapper">
                 <div id="input-mic-holder">
-                    <div id="input-mic" class="inactive-mic" onclick="STTModule.micON()"></div>
+                    <div id="input-mic" class="inactive-mic" onclick="STTModule.micON()" style="display : none;"></div>
                 </div>
 
                 <label for="user-input" class="input-outline responsive-column">
-                  <input id="user-input" type="text" placeholder="Type something, e.g. “Turn the headlights on”">
+                  <input id="user-input" type="text" placeholder="Tapez votre reponse, ou posez une question içi ! " >
                 </label>
             </div>
         </div>
         <div id="tooltip-dialog-list"></div>
-        <div id="sidebar">
+        <div id="sidebar" style="display : none;">
             <div class="close-div" onclick="Sidebar.toggle()">
                 <img src="images/close-button.png" class="close" alt="close" />
             </div>
-            <p class="pre-bar">I’m trained on these topics:</p>
-            <ul id="suggestion-list"></ul>
+            <p class="pre-bar" style="display : none;">I’m trained on these topics:</p>
+            <ul id="suggestion-list" style = "display : none;"></ul>
         </div>
     </div>
-
-    <div class="disclaimer-message">
+  
+    <div class="disclaimer-message" style="display : none;">
         <h6 class="base-h6">
           * This system is for demonstration purposes only and is not intended to process Personal Data. No Personal Data is to be entered
           into this system as it may not have the necessary controls in place to meet the requirements of the General Data Protection
           Regulation (EU) 2016/679.
         </h6>
       </div>
-      
+      <br>
+      <p> Screenshots : <p>
+      <canvas  id="myCanvas" width="400" height="350"></canvas> 
+      <p id="myForm"></p>
+      <!--<img id="myImg" width="400" height="350">-->
+
     <script>
         // For cloaking. Done in JS for the case of disabled JS (i.e. even though not much will work, something will be displayed.)
         document.body.style.visibility = 'hidden';
     </script>
+<script>
+    // getUserMedia only works over https in Chrome 47+, so we redirect to https. Also notify user if running from file.
+    if (window.location.protocol == "file:") {
+      alert("You seem to be running this example directly from a file. Note that these examples only work when served from a server or localhost due to canvas cross-domain restrictions.");
+    } else if (window.location.hostname !== "localhost" && window.location.protocol !== "https:"){
+      window.location.protocol = "https";
+    }
+  </script>
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-32642923-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+  </script>
+
+
+
     <!-- build:js vendor.min.js -->
     <script src="js/libs/snap.svg.js"></script>
     <script src="./../node_modules/whatwg-fetch/fetch.js"></script>
@@ -91,10 +225,1675 @@
     <script src="js/conversationResponse.js"></script>
     <script src="js/global.js"></script>
     <script src="js/ui_tests/tests.js"></script>
+    
+   
+    <!--<script type="text/javascript" src="js/html2canvas.js"></script>-->
+    <script src="js/axios.min.js"></script>
+    <script src="js/libs/utils.js"></script>
+<script src="js/clmtrackr.js"></script>
+<script src="js/model_pca_20_svm.js"></script>
+<script src="js/libs/Stats.js"></script>
+<script src="js/libs/d3.min.js"></script>
+<script src="js/emotion_classifier.js"></script>
+<script src="js/emotionmodel.js"></script>
+
+
+
+
     <!-- endbuild -->
     <script src="ibm/watson-speech.min.js"></script>
     <script src="ibm/speech-to-text.js"></script>
     <script src="ibm/text-to-speech.js"></script>
+    <!--<script
+              src="https://code.jquery.com/jquery-3.1.1.min.js"
+              integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+              crossorigin="anonymous"></script>-->
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script> 
+   <div id="content"  style="position:fixed;top:0;right:0">
+             <div id="container">
+          <video id="videoel" width="300" height="200" preload="auto" loop playsinline autoplay>
+          </video>
+          <canvas id="overlay" width="300" height="200"></canvas>
+        </div>
+        <div id="emotion_container" >
+          <div id="emotion_icons">
+            <img class="emotion_icon" id="icon1" src="./media/icon_angry.png">
+            <img class="emotion_icon" id="icon2" src="./media/icon_sad.png">
+            <img class="emotion_icon" id="icon3" src="./media/icon_surprised.png">
+            <img class="emotion_icon" id="icon4" src="./media/icon_happy.png">
+          </div>
+          <div id='emotion_chart'style="margin-left: -50px;" ></div>
+          <div id='Timer'style="margin-left: -50px;text-align: center;" size="3"/ ><p><h2>Time remaining ...</h2></p><input id= "TimeInput" style="
+            border-radius: 5px;
+            border: solid 1px #4f84c4;
+            padding: 5px;
+            text-align: center;" size="3"/></div>
+        </div>
+        <div id="controls">
+          <input style="display : none;" class="btn" type="button" value="wait, loading video" disabled="disabled" onclick="startVideo()" id="startbutton"></input>
+        </div>
+        <script>
+          var americano = [];
+          var vid = document.getElementById('videoel');
+          var vid_width = vid.width;
+          var vid_height = vid.height;
+          var overlay = document.getElementById('overlay');
+          var overlayCC = overlay.getContext('2d');
+          var k = 0;
+
+          
+  
+          /********** check and set up video/webcam **********/
+  
+          function enablestart() {
+            var startbutton = document.getElementById('startbutton');
+            startbutton.value = "start";
+            startbutton.disabled = null;
+          }
+  
+          function adjustVideoProportions() {
+            // resize overlay and video if proportions are different
+            // keep same height, just change width
+            var proportion = vid.videoWidth/vid.videoHeight;
+            vid_width = Math.round(vid_height * proportion);
+            vid.width = vid_width;
+            overlay.width = vid_width;
+          }
+  
+          function gumSuccess( stream ) {
+            // add camera stream if getUserMedia succeeded
+            if ("srcObject" in vid) {
+              vid.srcObject = stream;
+            } else {
+              vid.src = (window.URL && window.URL.createObjectURL(stream));
+            }
+            vid.onloadedmetadata = function() {
+              adjustVideoProportions();
+              vid.play();
+            }
+            vid.onresize = function() {
+              adjustVideoProportions();
+              if (trackingStarted) {
+                ctrack.stop();
+                ctrack.reset();
+                ctrack.start(vid);
+              }
+            }
+          }
+  
+          function gumFail() {
+            alert("There was some problem trying to fetch video from your webcam. If you have a webcam, please make sure to accept when the browser asks for access to your webcam.");
+          }
+  
+          navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+          window.URL = window.URL || window.webkitURL || window.msURL || window.mozURL;
+  
+          // check for camerasupport
+          if (navigator.mediaDevices) {
+            navigator.mediaDevices.getUserMedia({video : true}).then(gumSuccess).catch(gumFail);
+          } else if (navigator.getUserMedia) {
+            navigator.getUserMedia({video : true}, gumSuccess, gumFail);
+          } else {
+            alert("This demo depends on getUserMedia, which your browser does not seem to support. :(");
+          }
+  
+          vid.addEventListener('canplay', enablestart, false);
+  
+          /*********** setup of emotion detection *************/
+  
+          // set eigenvector 9 and 11 to not be regularized. This is to better detect motion of the eyebrows
+          
+          pModel.shapeModel.nonRegularizedVectors.push(9);
+          pModel.shapeModel.nonRegularizedVectors.push(11);
+  
+          var ctrack = new clm.tracker({useWebGL : true});
+          ctrack.init(pModel);
+          var trackingStarted = false;
+          let ok = false;
+          function startVideo() {
+            // start video
+            vid.play();
+            // start tracking
+            ctrack.start(vid);
+            trackingStarted = true;
+            // start loop to draw face
+            
+            drawLoop();
+          }
+          function drawLoop() {
+            requestAnimFrame(drawLoop);
+            overlayCC.clearRect(0, 0, vid_width, vid_height);
+            //psrElement.innerHTML = "score :" + ctrack.getScore().toFixed(4);
+            if (ctrack.getCurrentPosition()) {
+              ctrack.draw(overlay);
+            }
+            var cp = ctrack.getCurrentParameters();
+  
+            var er = ec.meanPredict(cp);
+            
+            if (er) {
+              updateData(er);
+              americano = er;
+              for (var i = 0;i < er.length;i++) {
+
+
+                
+                if (er[i].value > 0.4 ) {
+                  /*var latestResponse = Api.getWatsonPayload();
+                  var Images = latestResponse.context.Images
+                  if(Images){
+                    console.log('mmmmmmmm',ok, k);
+                    
+                        console.log('ma3adech fahem chayy !!!!!!!!!!!!');
+                        ok = true;
+                        //console.log('lass',ok,k)
+                        //snapshot2();            
+                      
+                    }*/
+                    
+                    
+                  
+                  document.getElementById('icon'+(i+1)).style.visibility = 'visible';
+                } else {
+                  document.getElementById('icon'+(i+1)).style.visibility = 'hidden';
+                }
+              }
+            }
+          }
+  
+          delete emotionModel['disgusted'];
+          delete emotionModel['fear'];
+          var ec = new emotionClassifier();
+          ec.init(emotionModel);
+          var emotionData = ec.getBlank();
+  
+          /************ d3 code for barchart *****************/
+  
+          var margin = {top : 20, right : 20, bottom : 10, left : 40},
+            width = 400 - margin.left - margin.right,
+            height = 100 - margin.top - margin.bottom;
+  
+          var barWidth = 30;
+  
+          var formatPercent = d3.format(".0%");
+  
+          var x = d3.scale.linear()
+            .domain([0, ec.getEmotions().length]).range([margin.left, width+margin.left]);
+  
+          var y = d3.scale.linear()
+            .domain([0,1]).range([0, height]);
+  
+          var svg = d3.select("#emotion_chart").append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+  
+          svg.selectAll("rect").
+            data(emotionData).
+            enter().
+            append("svg:rect").
+            attr("x", function(datum, index) { return x(index); }).
+            attr("y", function(datum) { return height - y(datum.value); }).
+            attr("height", function(datum) { return y(datum.value); }).
+            attr("width", barWidth).
+            attr("fill", "#2d578b");
+  
+          svg.selectAll("text.labels").
+            data(emotionData).
+            enter().
+            append("svg:text").
+            attr("x", function(datum, index) { return x(index) + barWidth; }).
+            attr("y", function(datum) { return height - y(datum.value); }).
+            attr("dx", -barWidth/2).
+            attr("dy", "1.2em").
+            attr("text-anchor", "middle").
+            text(function(datum) { return datum.value;}).
+            attr("fill", "white").
+            attr("class", "labels");
+  
+          svg.selectAll("text.yAxis").
+            data(emotionData).
+            enter().append("svg:text").
+            attr("x", function(datum, index) { return x(index) + barWidth; }).
+            attr("y", height).
+            attr("dx", -barWidth/2).
+            attr("text-anchor", "middle").
+            attr("style", "font-size: 12").
+            text(function(datum) { return datum.emotion;}).
+            attr("transform", "translate(0, 18)").
+            attr("class", "yAxis");
+  
+          function updateData(data) {
+            // update
+            var rects = svg.selectAll("rect")
+              .data(data)
+              .attr("y", function(datum) { return height - y(datum.value); })
+              .attr("height", function(datum) { return y(datum.value); });
+            var texts = svg.selectAll("text.labels")
+              .data(data)
+              .attr("y", function(datum) { return height - y(datum.value); })
+              .text(function(datum) { return datum.value.toFixed(1);});
+  
+            // enter
+            rects.enter().append("svg:rect");
+            texts.enter().append("svg:text");
+  
+            // exit
+            rects.exit().remove();
+            texts.exit().remove();
+          }
+  
+          /******** stats ********/
+  
+          stats = new Stats();
+          stats.domElement.style.position = 'absolute';
+          stats.domElement.style.top = '0px';
+          document.getElementById('container').appendChild( stats.domElement );
+  
+          // update stats on every iteration
+          document.addEventListener('clmtrackrIteration', function(event) {
+            stats.update();
+          }, false);
+  
+        </script>
+      </div>
 </body>
+<!--
+<script type="text/javascript">
+  /*function SubForm (){
+    $.ajax({
+        url:'http://localhost:3000/QCM1',
+        type:'post',
+        data:{data : 'abcd'},
+        success:function(){
+          console.log("worked");
+        }
+    });*/
+    /*$(document).ready(function(){				
+                $('#submitQCM1').click(function(e){
+                    e.preventDefault();
+                    console.log('select_link clicked');*/
+                    
+                     /*$.ajax({
+                        dataType: 'jsonp',
+                        data: "data=yeah",						
+                        jsonp: 'callback',
+                        url: 'http://localhost:3000/endpoint?callback=?',						
+                        success: function(data) {
+                            console.log('success');
+                            console.log(JSON.stringify(data));
+                        }
+                    });*/
+					/*var data = {};
+					data.title = "title";
+					data.message = "message";
+					
+					$.ajax({
+						type: 'POST',
+						data: JSON.stringify(data),
+				        contentType: 'application/json',
+                        url: 'http://localhost:3000/endpoint',						
+                        success: function(data) {
+                            console.log('success');
+                            console.log(JSON.stringify(data));
+                        }
+                    });
+                    e.preventDefault();*/
+					/*$.ajax('http://localhost:3000/endpoint', {
+					        type: 'POST',
+					        data: JSON.stringify(data),
+					        contentType: 'application/json',
+					        success: function() { console.log('success');},
+					        error  : function() { console.log('error');}
+					});*/
+              /*  });				
+            });*/
+            $("#formid").submit(function(event) {
+
+/* stop form from submitting normally */
+event.preventDefault();
+
+/* get the action attribute from the <form action=""> element */
+var $form = $( this ),
+    url = $form.attr( 'action' );
+
+/* Send the data using post with element id name and name2*/
+var posting = $.post( url, { name: "frijiman", name2: "bilAlwen" } );
+
+/* Alerts the results */
+posting.done(function( data ) {
+  alert('success');
+});
+});
+</script>
+-->
+ <!--
+<script>
+
+  function post(path, params, method) {
+   method = method || "post"; // Set method to post by default if not specified.    // The rest of this code assumes you are not using a library.
+   // It can be made less wordy if you use one.
+   var form = document.createElement("form");
+   form.setAttribute("method", method);
+   form.setAttribute("action", path);    for(var key in params) {
+       if(params.hasOwnProperty(key)) {
+           var hiddenField = document.createElement("input");
+           hiddenField.setAttribute("type", "hidden");
+           hiddenField.setAttribute("name", key);
+           hiddenField.setAttribute("value", params[key]);            form.appendChild(hiddenField);
+       }
+   }    document.body.appendChild(form);
+   form.submit();
+   console.log("post done"+path+" ||| data ="+JSON.stringify(params));
+}
+
+window.setInterval(function() {
+  try{
+document.getElementById("submitQCM1").onclick=function(){
+  post('http://localhost:3000/posts/QCM1',{data : 'abcd'});
+  // winik hani atina exmpl url ou data ayy exemple yemchi ? url localhost:3000/posts/QCM1 data n7ottou "abcd" chniya data name? ili bech t3adaha f//  console.log("Helloworld");
+ // alert("done");
+};
+}catch{
+console.log("no element");
+
+} 
+}, 2000);
+
+</script>
+-->
+<script>
+    //var vid = document.getElementById('videoel');
+    var i = 1; // Global Variable for Name
+    //const SRC = 'images/onStreet.jpg';
+    const CLOUDINARY_URL = ' https://api.cloudinary.com/v1_1/dwsk5ycwd/upload';
+    const CLOUDINARY_UPLOAD_PRESET = 'bjjx2k8b';
+    var canvas, ctx;
+    //var ResponseImageCount = 0
+    //var BollWhat = false
+    let QCMScore = 0;
+    let IntelScore = 0;
+    let qcmDivider = 0;
+    let intelDivider = 0;
+    let redaction1InvalidTimes = 0;
+    let redaction2InvalidTimes = 0;
+    let QCMResponses =[];
+    let ImagesSentimental = [];
+    let clickedButtonA = false;
+    let clickedButtonB = false;
+    let clickedButtonC = false;
+    let clickedButtonD = false;
+    let clickedButtonE = false;
+    let clickedButtonF = false;
+    let clickedButtonG = false;
+    let clickedButtonA2 = false;
+    let clickedButtonB2 = false;
+    let clickedButtonC2 = false;
+    let clickedButtonD2 = false;
+    let clickedButtonE2 = false;
+    let clickedButtonF2 = false;
+    let clickedButtonG2 = false;
+    let clickedButtonA3 = false;
+    let clickedButtonB3 = false;
+    let clickedButtonC3 = false;
+    let clickedButtonD3 = false;
+    let clickedButtonE3 = false;
+    let clickedButtonF3 = false;
+    let clickedButtonG3 = false;
+    let clickedButtonA4 = false;
+    let clickedButtonB4 = false;
+    let clickedButtonC4 = false;
+    let clickedButtonD4 = false;
+    let clickedButtonE4 = false;
+    let clickedButtonF4 = false;
+    let clickedButtonG4 = false;
+    let clickedButtonA5 = false;
+    let clickedButtonB5 = false;
+    let clickedButtonC5 = false;
+    let clickedButtonD5 = false;
+    let clickedButtonE5 = false;
+    let clickedButtonA6 = false;
+    let clickedButtonB6 = false;
+    let clickedButtonC6 = false;
+    let clickedButtonD6 = false;
+    let clickedButtonE6 = false;
+    let clickedButtonA7 = false;
+    let clickedButtonB7 = false;
+    let clickedButtonC7 = false;
+    let clickedButtonD7 = false;
+    let clickedButtonE7 = false;
+    let timeLeft = 120;
+   
+    
+      var elem = document.getElementById('TimeInput');
+      var timerId = setInterval(countdown, 1000);
+
+    function countdown() {
+        if (timeLeft == -1) {
+            clearTimeout(timerId);
+            doSomething();
+        } else {
+            if(timeLeft < 30 && timeLeft >= 0){
+              elem.style.backgroundColor = '#ff4d4d';
+              elem.value = timeLeft ;
+              timeLeft--;
+            }
+            if(timeLeft < 60 && timeLeft >= 30){
+              elem.style.backgroundColor = '#ffad33';
+              elem.value = timeLeft  ;
+              timeLeft--;
+            }
+            if(timeLeft>=60 && timeLeft < 120){
+              elem.style.backgroundColor = '#b3b300';
+              elem.value = timeLeft  ;
+              timeLeft--;
+            }
+            if(timeLeft >= 120){
+              elem.style.backgroundColor = '#66ff99';
+              elem.value = timeLeft  ;
+              timeLeft--;
+            }
+            
+        }
+    }
+    function doSomething(){
+      Api.postConversationMessage('au revoir');
+      clearTimeout(timerId);
+      alert('done !!!');
+    }
+    function init(){
+        // Get the canvas and obtain a context for
+        // drawing in it
+        canvas = document.getElementById("myCanvas");
+        //photo = document.getElementById("myImg");
+        ctx = canvas.getContext('2d');
+        
+    
+    }
+    /*function snapshot2() {
+         // Draws current image from the video element into the canvas
+        var latestResponse = Api.getWatsonPayload();
+        var Images = latestResponse.context.Images;
+        ctx.drawImage(vid, 0,0, canvas.width, canvas.height);
+        var imgAsDataURL = canvas.toDataURL("image/png");
+        var formData = new FormData();
+        console.log(imgAsDataURL);
+        formData.append('file' , imgAsDataURL);
+        formData.append('public_id', 'Image_'+ i);
+        formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+        axios.post(CLOUDINARY_URL, formData).then((res) => {
+          console.log('axios success',res);
+          k++;
+          ok = false;
+          console.log('Supposedly changed variables...',ok,k)
+        }).catch((err) => {
+          console.log('axios error',err);
+        });
+        var y = document.createElement("IMG");
+        console.log('here !!!');
+        //console.log('Images is ...',Images);
+        //Images.push({"id" : "Image_" + i , "src" : imgAsDataURL});
+        y.setAttribute("src", imgAsDataURL);
+        y.setAttribute("id", "Image_" + i);
+        y.setAttribute("alt", "close");
+        document.getElementById("myForm").appendChild(y);
+        i++;
+        
+      }*/
+    function snapshot() {
+         // Draws current image from the video element into the canvas
+         //console.log('Hana...',americano);
+        var emotionValues = [];
+        var emotional = '';
+        americano.map((emotion) => {
+          emotionValues.push(emotion.value);
+        });
+        var maxValueEmotion = Math.max.apply(Math,emotionValues);
+        if(maxValueEmotion < 0.4){
+          emotional = 'Neutral';
+        }else{
+          for(let i = 0; i< americano.length; i++){
+          if(americano[i].value == maxValueEmotion){
+            emotional = americano[i].emotion;
+          }
+        }
+        }
+        //console.log('hana...',emotionValues,maxValueEmotion);
+        
+        var latestResponse = Api.getWatsonPayload();
+        
+        console.log('images before add...', ImagesSentimental, ImagesSentimental.length);
+        let imagelength = ImagesSentimental.length;
+        var UseruniqID = latestResponse.context.userInput1.name + '_' + latestResponse.context.userInput1.lastname + '_';
+        ctx.drawImage(vid, 0,0, canvas.width, canvas.height);
+        var imgAsDataURL = canvas.toDataURL("image/png");
+        var formData = new FormData();
+        console.log(imgAsDataURL);
+        formData.append('file' , imgAsDataURL);
+        formData.append('public_id', UseruniqID + 'Image_'+ i);
+        formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+        axios.post(CLOUDINARY_URL, formData).then((res) => {
+          console.log('axios success',res.data);
+          ImagesSentimental.push({"id" : res.data.public_id , "url" : res.data.secure_url , "date" : res.data.created_at, "emotion" :  emotional, "emotionValue" :  maxValueEmotion});
+          console.log('now Images is ...',ImagesSentimental, ImagesSentimental.length);
+        }).catch((err) => {
+          console.log('axios error',err);
+        });
+        var y = document.createElement("IMG");
+        //console.log('here !!!');
+        //console.log('Images is ...',Images);
+        //Images.push({"id" : "Image_" + i , "src" : imgAsDataURL});
+        y.setAttribute("src", imgAsDataURL);
+        y.setAttribute("id", "Image_" + i);
+        y.setAttribute("alt", "close");
+        document.getElementById("myForm").appendChild(y);
+        i++;
+        
+      }
+   /* function imageBoxCreate(){
+      console.log('saluu !!!');
+      console.log(i,SRC);
+        var y = document.createElement("IMG");
+        y.setAttribute("src", SRC);
+        y.setAttribute("id", "Image_" + i);
+        y.setAttribute("alt", "close");
+        document.getElementById("myForm").appendChild(y);
+        i++;
+        }*/
+    function registerA(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonA === false){
+        QCMResponses.push("a");
+        console.log(QCMResponses);
+        clickedButtonA = true;
+        document.getElementById("buttonA").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"a");
+        console.log(QCMResponses);
+        clickedButtonA = false;
+        document.getElementById("buttonA").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerB(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonB === false){
+        QCMResponses.push("b");
+        console.log(QCMResponses);
+        clickedButtonB = true;
+        document.getElementById("buttonB").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"b");
+        console.log(QCMResponses);
+        clickedButtonB = false;
+        document.getElementById("buttonB").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerC(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonC === false){
+        QCMResponses.push("c");
+        console.log(QCMResponses);
+        clickedButtonC = true;
+        document.getElementById("buttonC").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"c");
+        console.log(QCMResponses);
+        clickedButtonC = false;
+        document.getElementById("buttonC").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerD(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonD === false){
+        QCMResponses.push("d");
+        console.log(QCMResponses);
+        clickedButtonD = true;
+        document.getElementById("buttonD").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"d");
+        console.log(QCMResponses);
+        clickedButtonD = false;
+        document.getElementById("buttonD").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerE(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonE === false){
+        QCMResponses.push("e");
+        console.log(QCMResponses);
+        clickedButtonE = true;
+        document.getElementById("buttonE").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"e");
+        console.log(QCMResponses);
+        clickedButtonE = false;
+        document.getElementById("buttonE").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerF(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonF === false){
+        QCMResponses.push("f");
+        console.log(QCMResponses);
+        clickedButtonF = true;
+        document.getElementById("buttonF").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"f");
+        console.log(QCMResponses);
+        clickedButtonF = false;
+        document.getElementById("buttonF").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerG(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonG === false){
+        QCMResponses.push("g");
+        console.log(QCMResponses);
+        clickedButtonG = true;
+        document.getElementById("buttonG").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"g");
+        console.log(QCMResponses);
+        clickedButtonG = false;
+        document.getElementById("buttonG").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function removeAnswer(QCMResponses,response){
+      for (let index = QCMResponses.length -1; index >= 0 ; index--) {
+        if (QCMResponses[index] === response){
+          QCMResponses.splice(index,1);
+        }
+        
+      }
+    }
+    function registerAll(){
+      let resp = "";
+      console.log('We are here');
+      for (let index = 0; index < QCMResponses.length; index++) {
+        resp = resp + QCMResponses[index] + ","
+        
+      }
+      /*var questionType = '';
+      var questionId = '';
+      if (String(id).substring(1,3) === "QCM") {
+        questionType = 'QCM';
+        questionId = String(id).substring(3);
+      };
+      if (String(id).substring(1,12) === "intelligence") {
+        questionType = 'intelligence';
+        questionId = String(id).substring(12);
+      };*/    
+      //sendTodatabase(resp, questionType,questionId);  
+
+      //var context = latestResponse.context;
+      //console.log(context);
+      //context.push({"qcm1" : resp});
+      //console.log(context);
+
+      //var data = Api.getUserPayload();
+      //console.log(data);
+
+      //responses.qcm.push({"qcm1" : "a,b,c,"})
+      //console.log(responses);
+      var latestResponse = Api.getWatsonPayload();
+      snapshot();
+      //show data before change,
+      //console.log(latestResponse);
+      //set WatsonPayload context variable answers from "abcd" to the actual response
+      let CorrectAnswer = (latestResponse.context.QCMRightOptions.qcm1.split('_'))[0].split(',').sort().join('');
+      let level = (latestResponse.context.QCMRightOptions.qcm1.split('_'))[1];
+      let respOrdered = resp.split(',').sort().join('');
+      console.log('supposedly_Ordered, but you knoww',latestResponse.context.QCMRightOptions.qcm1,CorrectAnswer,resp,respOrdered,level);
+      if (respOrdered == CorrectAnswer){
+        QCMScore = QCMScore + parseInt(level)
+        console.log('QCMScore...',QCMScore);
+      }
+      qcmDivider = qcmDivider + parseInt(level)
+      console.log('QCMDivider...',qcmDivider);
+      latestResponse.context.answers.qcm1 = resp;
+      Api.postConversationMessage(resp);
+      timeLeft = timeLeft + 60;
+      clearTimeout(timerId);
+      timerId = setInterval(countdown, 1000);
+      QCMResponses =[];
+    }
+
+    function registerA2(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonA2 === false){
+        QCMResponses.push("a");
+        console.log(QCMResponses);
+        clickedButtonA2 = true;
+        document.getElementById("buttonA2").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"a");
+        console.log(QCMResponses);
+        clickedButtonA2 = false;
+        document.getElementById("buttonA2").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerB2(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonB2 === false){
+        QCMResponses.push("b");
+        console.log(QCMResponses);
+        clickedButtonB2 = true;
+        document.getElementById("buttonB2").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"b");
+        console.log(QCMResponses);
+        clickedButtonB2 = false;
+        document.getElementById("buttonB2").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerC2(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonC2 === false){
+        QCMResponses.push("c");
+        console.log(QCMResponses);
+        clickedButtonC2 = true;
+        document.getElementById("buttonC2").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"c");
+        console.log(QCMResponses);
+        clickedButtonC2 = false;
+        document.getElementById("buttonC2").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerD2(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonD2 === false){
+        QCMResponses.push("d");
+        console.log(QCMResponses);
+        clickedButtonD2 = true;
+        document.getElementById("buttonD2").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"d");
+        console.log(QCMResponses);
+        clickedButtonD2 = false;
+        document.getElementById("buttonD2").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerE2(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonE2 === false){
+        QCMResponses.push("e");
+        console.log(QCMResponses);
+        clickedButtonE2 = true;
+        document.getElementById("buttonE2").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"e");
+        console.log(QCMResponses);
+        clickedButtonE2 = false;
+        document.getElementById("buttonE2").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerF2(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonF2 === false){
+        QCMResponses.push("f");
+        console.log(QCMResponses);
+        clickedButtonF2 = true;
+        document.getElementById("buttonF2").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"f");
+        console.log(QCMResponses);
+        clickedButtonF2 = false;
+        document.getElementById("buttonF2").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerG2(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonG2 === false){
+        QCMResponses.push("g");
+        console.log(QCMResponses);
+        clickedButtonG2 = true;
+        document.getElementById("buttonG2").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"g");
+        console.log(QCMResponses);
+        clickedButtonG2 = false;
+        document.getElementById("buttonG2").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerAll2(id){
+      let resp = "";
+      //console.log(id);
+      for (let index = 0; index < QCMResponses.length; index++) {
+        resp = resp + QCMResponses[index] + ","
+        
+      }
+      /*var questionType = '';
+      var questionId = '';
+      if (String(id).substring(1,3) === "QCM") {
+        questionType = 'QCM';
+        questionId = String(id).substring(3);
+      };
+      if (String(id).substring(1,12) === "intelligence") {
+        questionType = 'intelligence';
+        questionId = String(id).substring(12);
+      };*/    
+      //sendTodatabase(resp, questionType,questionId);  
+      var API = Api.getWatsonPayload();
+      snapshot();
+      //show data before change,
+      //console.log('all2',API);
+      var latestResponse = Api.getWatsonPayload();
+      //set WatsonPayload context variable answers from "abcd" to the actual response
+      let CorrectAnswer = (latestResponse.context.QCMRightOptions.qcm2.split('_'))[0].split(',').sort().join('');
+      let level = (latestResponse.context.QCMRightOptions.qcm2.split('_'))[1];
+      let respOrdered = resp.split(',').sort().join('');
+      console.log('supposedly_Ordered, but you knoww',latestResponse.context.QCMRightOptions.qcm2,CorrectAnswer,resp,respOrdered,level);
+      if (respOrdered == CorrectAnswer){
+        QCMScore = QCMScore + parseInt(level)
+        console.log('QCMScore...',QCMScore);
+      }
+      qcmDivider = qcmDivider + parseInt(level)
+      console.log('QCMDivider...',qcmDivider);
+      latestResponse.context.answers.qcm2 = resp;
+      //Api.setWatsonPayload({'context': {'answers': resp}});
+      //send with the new data
+      Api.postConversationMessage(resp);
+      timeLeft = timeLeft + 60;
+      clearTimeout(timerId);
+      timerId = setInterval(countdown, 1000);
+      QCMResponses =[];
+    }
+
+    function registerA3(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonA3 === false){
+        QCMResponses.push("a");
+        console.log(QCMResponses);
+        clickedButtonA3 = true;
+        document.getElementById("buttonA3").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"a");
+        console.log(QCMResponses);
+        clickedButtonA3 = false;
+        document.getElementById("buttonA3").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerB3(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonB3 === false){
+        QCMResponses.push("b");
+        console.log(QCMResponses);
+        clickedButtonB3 = true;
+        document.getElementById("buttonB3").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"b");
+        console.log(QCMResponses);
+        clickedButtonB3 = false;
+        document.getElementById("buttonB3").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerC3(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonC3 === false){
+        QCMResponses.push("c");
+        console.log(QCMResponses);
+        clickedButtonC3 = true;
+        document.getElementById("buttonC3").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"c");
+        console.log(QCMResponses);
+        clickedButtonC3 = false;
+        document.getElementById("buttonC3").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerD3(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonD3 === false){
+        QCMResponses.push("d");
+        console.log(QCMResponses);
+        clickedButtonD3 = true;
+        document.getElementById("buttonD3").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"d");
+        console.log(QCMResponses);
+        clickedButtonD3 = false;
+        document.getElementById("buttonD3").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerE3(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonE3 === false){
+        QCMResponses.push("e");
+        console.log(QCMResponses);
+        clickedButtonE3 = true;
+        document.getElementById("buttonE3").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"e");
+        console.log(QCMResponses);
+        clickedButtonE3 = false;
+        document.getElementById("buttonE3").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerF3(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonF3 === false){
+        QCMResponses.push("f");
+        console.log(QCMResponses);
+        clickedButtonF3 = true;
+        document.getElementById("buttonF3").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"f");
+        console.log(QCMResponses);
+        clickedButtonF3 = false;
+        document.getElementById("buttonF3").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerG3(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonG3 === false){
+        QCMResponses.push("g");
+        console.log(QCMResponses);
+        clickedButtonG3 = true;
+        document.getElementById("buttonG").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"g");
+        console.log(QCMResponses);
+        clickedButtonG3 = false;
+        document.getElementById("buttonG3").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerAll3(id){
+      let resp = "";
+      console.log(id);
+      for (let index = 0; index < QCMResponses.length; index++) {
+        resp = resp + QCMResponses[index] + ","
+        
+      }
+      /*var questionType = '';
+      var questionId = '';
+      if (String(id).substring(1,3) === "QCM") {
+        questionType = 'QCM';
+        questionId = String(id).substring(3);
+      };
+      if (String(id).substring(1,12) === "intelligence") {
+        questionType = 'intelligence';
+        questionId = String(id).substring(12);
+      };*/    
+      //sendTodatabase(resp, questionType,questionId);  
+      var API = Api.getWatsonPayload();
+      snapshot();
+      //show data before change,
+      console.log(API);
+      var latestResponse = Api.getWatsonPayload();
+      //set WatsonPayload context variable answers from "abcd" to the actual response
+      let CorrectAnswer = (latestResponse.context.QCMRightOptions.qcm3.split('_'))[0].split(',').sort().join('');
+      let level = (latestResponse.context.QCMRightOptions.qcm3.split('_'))[1];
+      let respOrdered = resp.split(',').sort().join('');
+      console.log('supposedly_Ordered, but you knoww',latestResponse.context.QCMRightOptions.qcm3,CorrectAnswer,resp,respOrdered,level);
+      if (respOrdered == CorrectAnswer){
+        QCMScore = QCMScore + parseInt(level)
+        console.log('QCMScore...',QCMScore);
+      }
+      qcmDivider = qcmDivider + parseInt(level)
+      console.log('QCMDivider...',qcmDivider);
+      latestResponse.context.answers.qcm3 = resp;
+      //Api.setWatsonPayload({'context': {'answers': resp}});
+      //send with the new data
+      Api.postConversationMessage(resp);
+      timeLeft = timeLeft + 60;
+      clearTimeout(timerId);
+      timerId = setInterval(countdown, 1000);
+      QCMResponses =[];
+    }
+
+    function registerA4(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonA4 === false){
+        QCMResponses.push("a");
+        console.log(QCMResponses);
+        clickedButtonA4 = true;
+        document.getElementById("buttonA4").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"a");
+        console.log(QCMResponses);
+        clickedButtonA4 = false;
+        document.getElementById("buttonA4").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerB4(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonB4 === false){
+        QCMResponses.push("b");
+        console.log(QCMResponses);
+        clickedButtonB4 = true;
+        document.getElementById("buttonB4").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"b");
+        console.log(QCMResponses);
+        clickedButtonB4 = false;
+        document.getElementById("buttonB4").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerC4(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonC4 === false){
+        QCMResponses.push("c");
+        console.log(QCMResponses);
+        clickedButtonC4 = true;
+        document.getElementById("buttonC4").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"c");
+        console.log(QCMResponses);
+        clickedButtonC4 = false;
+        document.getElementById("buttonC4").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerD4(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonD4 === false){
+        QCMResponses.push("d");
+        console.log(QCMResponses);
+        clickedButtonD4 = true;
+        document.getElementById("buttonD4").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"d");
+        console.log(QCMResponses);
+        clickedButtonD4 = false;
+        document.getElementById("buttonD4").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerE4(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonE4 === false){
+        QCMResponses.push("e");
+        console.log(QCMResponses);
+        clickedButtonE4 = true;
+        document.getElementById("buttonE4").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"e");
+        console.log(QCMResponses);
+        clickedButtonE4 = false;
+        document.getElementById("buttonE4").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerF4(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonF4 === false){
+        QCMResponses.push("f");
+        console.log(QCMResponses);
+        clickedButtonF4 = true;
+        document.getElementById("buttonF4").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"f");
+        console.log(QCMResponses);
+        clickedButtonF4 = false;
+        document.getElementById("buttonF4").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerG4(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonG4 === false){
+        QCMResponses.push("g");
+        console.log(QCMResponses);
+        clickedButtonG4 = true;
+        document.getElementById("buttonG4").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"g");
+        console.log(QCMResponses);
+        clickedButtonG4 = false;
+        document.getElementById("buttonG4").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerAll4(id){
+      let resp = "";
+      console.log(id);
+      for (let index = 0; index < QCMResponses.length; index++) {
+        resp = resp + QCMResponses[index] + ","
+        
+      }
+      /*var questionType = '';
+      var questionId = '';
+      if (String(id).substring(1,3) === "QCM") {
+        questionType = 'QCM';
+        questionId = String(id).substring(3);
+      };
+      if (String(id).substring(1,12) === "intelligence") {
+        questionType = 'intelligence';
+        questionId = String(id).substring(12);
+      };*/    
+      //sendTodatabase(resp, questionType,questionId);  
+      //var latestResponse = Api.getWatsonPayload();
+      
+      var API = Api.getWatsonPayload();
+      snapshot();
+      //show data before change,
+      console.log(API);
+      var latestResponse = Api.getWatsonPayload();
+      //set WatsonPayload context variable answers from "abcd" to the actual response
+      let CorrectAnswer = (latestResponse.context.QCMRightOptions.qcm4.split('_'))[0].split(',').sort().join('');
+      let level = (latestResponse.context.QCMRightOptions.qcm4.split('_'))[1];
+      let respOrdered = resp.split(',').sort().join('');
+      console.log('supposedly_Ordered, but you knoww',latestResponse.context.QCMRightOptions.qcm4,CorrectAnswer,resp,respOrdered,level);
+      if (respOrdered == CorrectAnswer){
+        QCMScore = QCMScore + parseInt(level)
+        console.log('QCMScore...',QCMScore);
+      }
+      qcmDivider = qcmDivider + parseInt(level)
+      console.log('QCMDivider...',qcmDivider);
+      latestResponse.context.answers.qcm4 = resp;
+      latestResponse.context.answers.answeredqcm = "true";
+      //Api.setWatsonPayload({'context': {'answers': resp}});
+      //send with the new data
+      Api.postConversationMessage(resp);
+      timeLeft = timeLeft + 60;
+      clearTimeout(timerId);
+      timerId = setInterval(countdown, 1000);
+      QCMResponses =[];
+    }
+    function registerA5(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonA5 === false){
+        QCMResponses.push("a");
+        console.log(QCMResponses);
+        clickedButtonA5 = true;
+        document.getElementById("buttonA5").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"a");
+        console.log(QCMResponses);
+        clickedButtonA5 = false;
+        document.getElementById("buttonA5").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerB5(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonB5 === false){
+        QCMResponses.push("b");
+        console.log(QCMResponses);
+        clickedButtonB5 = true;
+        document.getElementById("buttonB5").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"b");
+        console.log(QCMResponses);
+        clickedButtonB5 = false;
+        document.getElementById("buttonB5").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerC5(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonC5 === false){
+        QCMResponses.push("c");
+        console.log(QCMResponses);
+        clickedButtonC5 = true;
+        document.getElementById("buttonC5").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"c");
+        console.log(QCMResponses);
+        clickedButtonC5 = false;
+        document.getElementById("buttonC5").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerD5(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonD5 === false){
+        QCMResponses.push("d");
+        console.log(QCMResponses);
+        clickedButtonD5 = true;
+        document.getElementById("buttonD5").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"d");
+        console.log(QCMResponses);
+        clickedButtonD5 = false;
+        document.getElementById("buttonD5").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerE5(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonE5 === false){
+        QCMResponses.push("e");
+        console.log(QCMResponses);
+        clickedButtonE5 = true;
+        document.getElementById("buttonE5").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"e");
+        console.log(QCMResponses);
+        clickedButtonE5 = false;
+        document.getElementById("buttonE5").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerAll5(id){
+      let resp = "";
+      console.log(id);
+      for (let index = 0; index < QCMResponses.length; index++) {
+        resp = resp + QCMResponses[index] + ","
+        
+      }
+      /*var questionType = '';
+      var questionId = '';
+      if (String(id).substring(1,3) === "QCM") {
+        questionType = 'QCM';
+        questionId = String(id).substring(3);
+      };
+      if (String(id).substring(1,12) === "intelligence") {
+        questionType = 'intelligence';
+        questionId = String(id).substring(12);
+      };*/    
+      //sendTodatabase(resp, questionType,questionId); 
+      var latestResponse = Api.getWatsonPayload();
+      snapshot();
+      let CorrectAnswer = (latestResponse.context.IntelRightOptions.intel1.split('_'))[0].split(',').sort().join('');
+      let level = (latestResponse.context.IntelRightOptions.intel1.split('_'))[1];
+      let respOrdered = resp.split(',').sort().join('');
+      console.log('supposedly_Ordered, but you knoww',latestResponse.context.IntelRightOptions.intel1,CorrectAnswer,resp,respOrdered,level);
+      if (respOrdered == CorrectAnswer){
+        IntelScore = IntelScore + parseInt(level)
+        console.log('IntelScore...',IntelScore);
+      }
+      intelDivider = intelDivider + parseInt(level)
+      console.log('IntelDivider...',intelDivider);
+      latestResponse.context.answers.intelligence1 = resp;
+      Api.postConversationMessage(resp); 
+      timeLeft = timeLeft + 120;
+      clearTimeout(timerId);
+      timerId = setInterval(countdown, 1000);
+      QCMResponses =[];
+    }
+    function registerA6(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonA6 === false){
+        QCMResponses.push("a");
+        console.log(QCMResponses);
+        clickedButtonA6 = true;
+        document.getElementById("buttonA6").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"a");
+        console.log(QCMResponses);
+        clickedButtonA6 = false;
+        document.getElementById("buttonA6").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerB6(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonB6 === false){
+        QCMResponses.push("b");
+        console.log(QCMResponses);
+        clickedButtonB6 = true;
+        document.getElementById("buttonB6").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"b");
+        console.log(QCMResponses);
+        clickedButtonB66 = false;
+        document.getElementById("buttonB6").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerC6(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonC6 === false){
+        QCMResponses.push("c");
+        console.log(QCMResponses);
+        clickedButtonC6 = true;
+        document.getElementById("buttonC6").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"c");
+        console.log(QCMResponses);
+        clickedButtonC6 = false;
+        document.getElementById("buttonC6").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerD6(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonD6 === false){
+        QCMResponses.push("d");
+        console.log(QCMResponses);
+        clickedButtonD6 = true;
+        document.getElementById("buttonD6").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"d");
+        console.log(QCMResponses);
+        clickedButtonD6 = false;
+        document.getElementById("buttonD6").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerE6(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonE6 === false){
+        QCMResponses.push("e");
+        console.log(QCMResponses);
+        clickedButtonE6 = true;
+        document.getElementById("buttonE6").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"e");
+        console.log(QCMResponses);
+        clickedButtonE6 = false;
+        document.getElementById("buttonE6").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerAll6(id){
+      let resp = "";
+      console.log(id);
+      for (let index = 0; index < QCMResponses.length; index++) {
+        resp = resp + QCMResponses[index] + ","
+        
+      }
+      /*var questionType = '';
+      var questionId = '';
+      if (String(id).substring(1,3) === "QCM") {
+        questionType = 'QCM';
+        questionId = String(id).substring(3);
+      };
+      if (String(id).substring(1,12) === "intelligence") {
+        questionType = 'intelligence';
+        questionId = String(id).substring(12);
+      };*/    
+      //sendTodatabase(resp, questionType,questionId);  
+      var latestResponse = Api.getWatsonPayload();
+      snapshot();
+      let CorrectAnswer = (latestResponse.context.IntelRightOptions.intel2.split('_'))[0].split(',').sort().join('');
+      let level = (latestResponse.context.IntelRightOptions.intel2.split('_'))[1];
+      let respOrdered = resp.split(',').sort().join('');
+      console.log('supposedly_Ordered, but you knoww',latestResponse.context.IntelRightOptions.intel2,CorrectAnswer,resp,respOrdered,level);
+      if (respOrdered == CorrectAnswer){
+        IntelScore = IntelScore + parseInt(level)
+        console.log('IntelScore...',IntelScore);
+      }
+      intelDivider = intelDivider + parseInt(level)
+      console.log('IntelDivider...',intelDivider);
+      latestResponse.context.answers.intelligence2 = resp;
+      Api.postConversationMessage(resp);
+      timeLeft = timeLeft + 120;
+      clearTimeout(timerId);
+      timerId = setInterval(countdown, 1000); 
+      QCMResponses =[];
+    }
+    function registerA7(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonA7 === false){
+        QCMResponses.push("a");
+        console.log(QCMResponses);
+        clickedButtonA7 = true;
+        document.getElementById("buttonA7").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"a");
+        console.log(QCMResponses);
+        clickedButtonA7 = false;
+        document.getElementById("buttonA7").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerB7(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonB7 === false){
+        QCMResponses.push("b");
+        console.log(QCMResponses);
+        clickedButtonB7 = true;
+        document.getElementById("buttonB7").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"b");
+        console.log(QCMResponses);
+        clickedButtonB7 = false;
+        document.getElementById("buttonB7").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerC7(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonC7 === false){
+        QCMResponses.push("c");
+        console.log(QCMResponses);
+        clickedButtonC7 = true;
+        document.getElementById("buttonC7").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"c");
+        console.log(QCMResponses);
+        clickedButtonC7 = false;
+        document.getElementById("buttonC7").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerD7(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonD7 === false){
+        QCMResponses.push("d");
+        console.log(QCMResponses);
+        clickedButtonD7 = true;
+        document.getElementById("buttonD7").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"d");
+        console.log(QCMResponses);
+        clickedButtonD7 = false;
+        document.getElementById("buttonD7").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerE7(){
+      //var property = document.getElementById(btn);
+      if(clickedButtonE7 === false){
+        QCMResponses.push("e");
+        console.log(QCMResponses);
+        clickedButtonE7 = true;
+        document.getElementById("buttonE7").style.backgroundColor = "#0066ff";
+      }else{
+        removeAnswer(QCMResponses,"e");
+        console.log(QCMResponses);
+        clickedButtonE7 = false;
+        document.getElementById("buttonE7").style.backgroundColor = "#DCDCDC";
+      }
+    }
+    function registerAll7(id){
+      let resp = "";
+      console.log(id);
+      for (let index = 0; index < QCMResponses.length; index++) {
+        resp = resp + QCMResponses[index] + ","
+        
+      }
+      /*var questionType = '';
+      var questionId = '';
+      if (String(id).substring(1,3) === "QCM") {
+        questionType = 'QCM';
+        questionId = String(id).substring(3);
+      };
+      if (String(id).substring(1,12) === "intelligence") {
+        questionType = 'intelligence';
+        questionId = String(id).substring(12);
+      };*/    
+      //sendTodatabase(resp, questionType,questionId);  
+      var latestResponse = Api.getWatsonPayload();
+      snapshot();
+      var context = latestResponse.context;
+      let CorrectAnswer = (latestResponse.context.IntelRightOptions.intel3.split('_'))[0].split(',').sort().join('');
+      let level = (latestResponse.context.IntelRightOptions.intel3.split('_'))[1];
+      let respOrdered = resp.split(',').sort().join('');
+      console.log('supposedly_Ordered, but you knoww',latestResponse.context.IntelRightOptions.intel3,CorrectAnswer,resp,respOrdered,level);
+      if (respOrdered == CorrectAnswer){
+        IntelScore = IntelScore + parseInt(level)
+        console.log('IntelScore...',IntelScore);
+      }
+      intelDivider = intelDivider + parseInt(level)
+      console.log('IntelDivider...',intelDivider);
+      var answers = context.answers;
+      var ScoreQCM = context.scoreQCM;
+      var ScoreIntel = context.scoreIntel;
+      answers.answeredquestions = true;
+      answers.intelligence3 = resp;
+      context.scoreQCM = ((QCMScore/qcmDivider)*10).toFixed(3);
+      context.scoreIntel = ((IntelScore/intelDivider)*10).toFixed(3);
+      context.Images = ImagesSentimental;
+      Api.postConversationMessage('Tout repondu !');
+      timeLeft = timeLeft + 120;
+      clearTimeout(timerId);
+      timerId = setInterval(countdown, 1000);
+      QCMResponses =[];
+    }
+    function sendInputs1(){
+    //console.log(document.getElementById('userInputs').style.display);
+    //getScreenshots();
+    startVideo();
+    //console.log('in input 1 images is ..', ImagesSentimental);
+    let latestResponse = Api.getWatsonPayload();
+    console.log('voir contenu latestresponse...',latestResponse);
+    //let Images = latestResponse.context.Images;
+    //snapshot();
+    //imageBoxCreate();
+    let x = document.getElementById("inputForm1");
+    let select2 = document.getElementById("selectField");
+    let cansubmit = true;
+
+    
+    if (x.elements[1].value.length == 0 || x.elements[2].value.length == 0 || select2.value == 'f0'){
+        cansubmit = false;
+      }
+    
+    //console.log(cansubmit);
+    if(cansubmit == true){
+      let firstName = x.elements[1].value;
+      console.log('FRSTNAme IS ...', firstName);
+      let lastName = x.elements[2].value;
+      console.log('LastNAme IS ...', lastName);
+      console.log('SelectedValue IS ...', select2.value);
+      //let mail = x.elements[2].value;
+      //let phoneNumber = x.elements[3].value;
+      let Field = select2.value;
+      if(Field == 'f1'){
+        latestResponse.context.userInput1.field = 'fibreOptique';
+      }if(Field == 'f2'){
+        latestResponse.context.userInput1.field = 'informatique';
+      }if(Field == 'f3'){
+        latestResponse.context.userInput1.field = 'mobile';
+      }
+      latestResponse.context.userInput1.name = firstName;
+      latestResponse.context.nom = firstName 
+      latestResponse.context.userInput1.lastname = lastName;
+      Api.postConversationMessage("input 1 validated");
+      timeLeft = timeLeft + 60;
+      clearTimeout(timerId);
+      timerId = setInterval(countdown, 1000);
+
+    }
+    else{
+      Api.postConversationMessage("not valid");
+      timeLeft = timeLeft + 30;
+      clearTimeout(timerId);
+      timerId = setInterval(countdown, 1000);
+    }
+    
+    }
+    function sendInputs2(){
+    
+    let latestResponse = Api.getWatsonPayload();
+    //let Images = latestResponse.context.Images
+    snapshot();
+    let x = document.getElementById("inputForm2");
+    let select1 = document.getElementById("selectResidence");
+    let select2 = document.getElementById("selectField");
+    let input = document.getElementById("experienceNumber");
+    //let mail = x.elements[2].value;
+      //let phoneNumber = x.elements[3].value;
+    let cansubmit = true;
+    console.log('Lalalaaan',select1.value)
+    if(select1.value == 'g0' ||  input.value.length == 0 || x.elements[0].value.length == 0 || x.elements[1].value.length == 0){
+      cansubmit = false;
+      console.log('HHHHH',select1.value,select2.value,input.value.length)
+    }
+    if(cansubmit == true){
+      let Goverment = select1.options[select1.selectedIndex].text;
+      
+      let experience = input.value;
+      let mail = x.elements[0].value;
+      let phoneNumber = x.elements[1].value;
+      //console.log('Field is ...' ,Field, 'and experience is ', experience);
+      latestResponse.context.userInput1.residence = Goverment;
+      latestResponse.context.userInput1.experience = experience;
+      latestResponse.context.userInput1.mail = mail;
+      latestResponse.context.userInput1.tel = phoneNumber;
+      Api.postConversationMessage("input2 validated");
+      timeLeft = timeLeft + 60;
+      clearTimeout(timerId);
+      timerId = setInterval(countdown, 1000);
+      //$('#TimerInput').show();
+      
+      
+
+    }
+    else{
+      Api.postConversationMessage("not valid 2");
+      timeLeft = timeLeft + 30;
+      clearTimeout(timerId);
+      timerId = setInterval(countdown, 1000);
+    }
+    /*console.log(cansubmit);
+    if(cansubmit == true){
+      let firstName = x.elements[0].value;
+      let lastName = x.elements[1].value;
+      let mail = x.elements[2].value;
+      let phoneNumber = x.elements[3].value;
+      latestResponse.context.userInput1.name = firstName;
+      latestResponse.context.userInput1.lastname = lastName;
+      latestResponse.context.userInput1.address = mail;
+      latestResponse.context.userInput1.tel = phoneNumber;
+      Api.postConversationMessage("input 1 validated");
+    }
+    else{
+      Api.postConversationMessage("not valid");
+    }*/
+    
+    }
+    function registerRedaction1(){
+      let latestResponse = Api.getWatsonPayload();
+      if(redaction1InvalidTimes == 0){
+        let x = document.getElementById("Redaction1").value.length;
+        console.log('ELEMENT avant...',document.getElementById("Redaction1").value);
+        console.log(document.getElementById("Redaction1").value)
+        if (x <= 4){
+          Api.postConversationMessage("invalid redaction");
+          timeLeft = timeLeft + 30;
+          clearTimeout(timerId);
+          timerId = setInterval(countdown, 1000);
+          redaction1InvalidTimes ++
+        }else{
+          snapshot();
+          let Redaction1 = document.getElementById("Redaction1").value;
+          latestResponse.context.answers.redaction1 = Redaction1;
+          Api.postConversationMessage("reponse redaction");
+          timeLeft = timeLeft + 120;
+          clearTimeout(timerId);
+          timerId = setInterval(countdown, 1000);
+      }
+      }else{
+        snapshot();
+        
+        let Redaction1 = document.getElementById("Redaction1").value;
+        
+        latestResponse.context.answers.redaction1 = Redaction1;
+        console.log('ELEMENT aprés...',document.getElementById("Redaction1").value);
+        Api.postConversationMessage("reponse redaction");
+        timeLeft = timeLeft + 120;
+        clearTimeout(timerId);
+        timerId = setInterval(countdown, 1000);
+      }
+     
+    }
+    function registerRedaction2(){
+      let latestResponse = Api.getWatsonPayload();
+      if(redaction2InvalidTimes == 0){
+        let x = document.getElementById("Redaction2").value.length;
+        //console.log('length is ...',x)
+        if (x <= 4){
+          Api.postConversationMessage("invalid redaction");
+          timeLeft = timeLeft + 30;
+          clearTimeout(timerId);
+          timerId = setInterval(countdown, 1000);
+          redaction2InvalidTimes ++
+        }else{
+          snapshot();
+          let Redaction2 = document.getElementById("Redaction2").value;
+          latestResponse.context.answers.redaction2 = Redaction2;
+          Api.postConversationMessage("reponse redaction");
+          timeLeft = timeLeft + 120;
+          clearTimeout(timerId);
+          timerId = setInterval(countdown, 1000);
+      }
+      }else{
+        snapshot();
+        let Redaction2 = document.getElementById("Redaction2").value;
+        latestResponse.context.answers.redaction2 = Redaction2;
+        Api.postConversationMessage("reponse redaction");
+        timeLeft = timeLeft + 120;
+        clearTimeout(timerId);
+        timerId = setInterval(countdown, 1000);
+      }
+    }
+    
+</script>
+
 
 </html>

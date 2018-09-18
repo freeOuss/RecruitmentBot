@@ -49,8 +49,8 @@
 
 #input-mic.active-mic, #input-mic:active {
   background-image: url("../images/mic-on.svg");
-  background-color: #32D0B6;
-  border: 0.25rem solid #01745E;
+  background-color: #4F84C4;
+  border: 0.25rem solid rgb(4, 53, 114);
 }
 
 #output-audio.audio-on {
@@ -133,7 +133,7 @@
 }
 
 #user-input.underline {
-    border-bottom:  0.125rem solid #00B4A0;
+    border-bottom:  0.125rem solid rgb(6, 72, 152);
 }
 
 #user-input::-webkit-input-placeholder {
@@ -183,7 +183,7 @@ input#user-input:-moz-placeholder {
 #chat-flow {
     text-align: left;
     width: calc(100% + 20px);
-    max-height:  15.625rem;
+    max-height:  100rem;
     overflow: hidden;
 }
 
@@ -196,7 +196,7 @@ input#user-input:-moz-placeholder {
     overflow: visible;
     position: relative;
     margin-left: 5.3125rem;
-    max-width:  20rem;
+    max-width:  40rem;
 }
 
 .watson-message,
@@ -204,7 +204,7 @@ input#user-input:-moz-placeholder {
     border-radius: 0.375rem;
     font-family: "Helvetica Neue for IBM Medium", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 1rem;
-    color: #FFFFFF;
+    color: #DDDDDD;
     padding: 1.25rem 1.875rem;
     display: inline-block;
     margin: 0.3125rem 0;
@@ -213,11 +213,11 @@ input#user-input:-moz-placeholder {
 }
 
 .watson-message {
-    background: #9E4CE6;
+    background: #B4B7BA;
 }
 
 .user-message {
-    background: #00B4A0;
+    background: #4F84C4;
 }
 
 .user-message::before {
@@ -226,7 +226,7 @@ input#user-input:-moz-placeholder {
     left: -0.6875rem;
     border-width: 0.625rem 0.75rem 0.625rem 0;
     border-style: solid;
-    border-color: transparent #00B4A0 transparent transparent;
+    border-color: transparent rgb(0, 117, 180) transparent transparent;
 }
 
 .user img {
@@ -234,6 +234,7 @@ input#user-input:-moz-placeholder {
     position: absolute;
     left: -4.6875rem;
     top: 0.3125rem;
+    display : none;
 }
 
 .watson .pre-bar::before {

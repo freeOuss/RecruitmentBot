@@ -73,9 +73,9 @@ var Animations = (function() {
     cloud6: '#cloud6'
   };
   var svgUrls = {
-    background: './images/background.svg',
+    background: './images/dashboard.svg',
     dashboard: './images/dashboard.svg',
-    sky: './images/sky.svg'
+    sky: './images/dashboard.svg'
   };
 
   // Publicly accessible methods defined
@@ -126,20 +126,20 @@ var Animations = (function() {
       dash.append(svgFragment);
 
       animateNeedles();
-      var rightWiper = Snap.select(idSelectors.rightWiper);
-      var leftWiper = Snap.select(idSelectors.leftWiper);
+      //var rightWiper = Snap.select(idSelectors.rightWiper);
+      //var leftWiper = Snap.select(idSelectors.leftWiper);
 
       // Remember the initial positioning of wipers
-      rightWiper.bbox = rightWiper.getBBox();
-      leftWiper.bbox = leftWiper.getBBox();
+    //  rightWiper.bbox = rightWiper.getBBox();
+      //leftWiper.bbox = leftWiper.getBBox();
 
-      state.wipers = {
+    /*  state.wipers = {
         right: rightWiper,
         left: leftWiper
       };
-
+*/
       // Draw the Watson log on the panel and set up for animations
-      Panel.init();
+     // Panel.init();
 
       initialized = true;
     });
@@ -155,12 +155,12 @@ var Animations = (function() {
       background.append(svgFragment);
 
       // Begin animating the elements
-      animateRoad();
-      animateTrees();
-      animateClouds();
+      //animateRoad();
+      //animateTrees();
+      //animateClouds();
 
       // Create the rain drops without displaying them
-      initiateRaining();
+      //initiateRaining();
 
       // Setup a loop to call toggle rain every 30s
       (function rainLoop() {
@@ -178,7 +178,7 @@ var Animations = (function() {
     });
   }
 
-  // Loads the sky
+  	// Loads the sky
   function loadSky() {
     // Create SVG group to hold the SVG loaded from file
     var sky = snapSvgCanvas.group();
@@ -422,10 +422,10 @@ var Animations = (function() {
 
     // Animate the needles around the center of the dials in a range
     // of 10-110 randomly
-    leftNeedle.animate({transform: 'r' + ((30 * Math.random()) - 30) + ','
-    + revmeter.getBBox().cx + ',' + revmeter.getBBox().cy}, 9000, mina.easeinout, function() {}, frameSkipRate);
-    rightNeedle.animate({transform: 'r' + ((45 * Math.random()) - 30) +  ', '
-    + speedometer.getBBox().cx + ',' + speedometer.getBBox().cy},
+    leftNeedle.animate({transform: 'r' + ((30 * Math.random()) - 30) + ',' +
+    revmeter.getBBox().cx + ',' + revmeter.getBBox().cy}, 9000, mina.easeinout, function() {}, frameSkipRate);
+    rightNeedle.animate({transform: 'r' + ((45 * Math.random()) - 30) +  ', ' +
+    speedometer.getBBox().cx + ',' + speedometer.getBBox().cy},
       9000 * Math.random(), mina.easeinout, function() {
         // Repeat the animation
         animateNeedles();

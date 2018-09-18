@@ -35,6 +35,9 @@ var TTSModule = (function() {
 
   // Create a callback when a new Watson response is received to start speech
   function textToSpeech() {
+    //var intent = Api.getWatsonPayload().intents[0].intent;
+    //console.log('intent in TTS...',intent);
+    //var LatestResponse = Api.getWatsonPayload.intents;
     var currentResponsePayloadSetter = Api.setWatsonPayload;
     Api.setWatsonPayload = function(payload) {
       currentResponsePayloadSetter.call(Api, payload);
@@ -78,7 +81,7 @@ var TTSModule = (function() {
             }
             audio = WatsonSpeech.TextToSpeech.synthesize({
               text: payload.text, // Output text/response
-              voice: 'en-US_MichaelVoice', // Default Watson voice
+              voice: 'fr-FR_ReneeVoice', // Default Watson voice
               autoPlay: true, // Automatically plays audio
               token: token
             });

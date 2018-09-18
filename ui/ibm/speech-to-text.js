@@ -45,7 +45,7 @@ var STTModule = (function() {
   function micON() { // When the microphone button is clicked
     if (recording === false) {
       if (records === 0) { // The first time the mic is clicked - inform user
-        Api.setWatsonPayload({output: {text: ['Accept the microphone prompt in your browser. Watson will listen soon.'], ref: 'STT'}}); // Dialog box output to let the user know we're recording
+        Api.setWatsonPayload({output: {text: ['Acceptez invite du microphone dans votre navigateur. Sesame va écouter bientôt.'], ref: 'STT'}}); // Dialog box output to let the user know we're recording
         records++;
       } else {
         Api.setWatsonPayload({output: {ref: 'STT'}}); // Let the user record right away
@@ -93,7 +93,7 @@ var STTModule = (function() {
                 Conversation.sendMessage();             // Send the message to Watson Conversation
               }
             } else { // If there isn't any data to be handled by the conversation, display a message to the user letting them know
-              Api.setWatsonPayload({output: {text: ['Microphone input cancelled. Please press the button to speak to Watson again']}}); // If the user clicked the microphone button again to cancel current input
+              Api.setWatsonPayload({output: {text: ['Entrée du microphone annulée, appuyez sur le bouton pour parler à nouveau !']}}); // If the user clicked the microphone button again to cancel current input
             }
           })
           .catch(function(err) { // Catch any errors made during the promise
